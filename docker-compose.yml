@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+
+  cache:
+    image: redis:6.2-alpine
+    container_name: redis-cache
+    restart: always
+    hostname: redis-cache
+    ports:
+      - '6379:6379'
+    env_file:
+      - cache.env
+    networks:
+      - studentchatapp
+
+  studentchat.webapi:
+    image: ${DOCKER_REGISTRY-}studentchatwebapi
+    build:
+      context: .
+      dockerfile: StudentChat.WebApi/Dockerfile
+    ports:
+      - 8001:8080
+    hostname: student-chat-app-api
+    depends_on:
+      - cache
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+    networks:
+      - studentchatapp 
+
+networks:
+  studentchatapp:
+    driver: bridge

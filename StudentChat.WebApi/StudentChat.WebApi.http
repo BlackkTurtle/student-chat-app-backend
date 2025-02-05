@@ -1,0 +1,6 @@
+@StudentChat.WebApi_HostAddress = http://localhost:5031
+
+GET {{StudentChat.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
